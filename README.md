@@ -42,7 +42,7 @@ At the end of 10 rounds, the simulator calculates:
 ```
 trading-simulator/
 │
-├── trading_simulator.py
+├── trade.py
 └── README.md
 ```
 
@@ -55,7 +55,7 @@ trading-simulator/
 3. Run:
 
 ```
-python trading_simulator.py
+python trade.py
 ```
 
 ---
