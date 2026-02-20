@@ -1,161 +1,184 @@
 import random
 
-stock_list = {
-    "HDFC": 2000,
-    "TATA": 4600,
-    "RELIANCE": 6000
-}
 
-def update_market():
-    for stock in stock_list:
+# ------------------ STOCK CLASS ------------------
+
+class Stock:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+    def update_price(self):
         change_percent = random.uniform(-0.05, 0.05)
-        stock_list[stock] *= (1 + change_percent)
+        self.price *= (1 + change_percent)
 
-        if stock_list[stock] < 1:
-            stock_list[stock] = 1
-
-
-def show_market(cash, portfolio):
-    print("\n--- Market Prices ---")
-    for stock, price in stock_list.items():
-        print(f"{stock}: ₹{price:.2f}")
-
-    print(f"\nCash Available: ₹{cash:.2f}")
-
-    print("\n--- Portfolio ---")
-    portfolio_value = 0
-
-    if not portfolio:
-        print("No holdings")
-    else:
-        for stock, qty in portfolio.items():
-            current_price = stock_list[stock]
-            total_value = qty * current_price
-            portfolio_value += total_value
-
-            print(f"{stock}: {qty} shares | ₹{current_price:.2f} each | Total: ₹{total_value:.2f}")
-
-    total_assets = cash + portfolio_value
-
-    print(f"\nPortfolio Value: ₹{portfolio_value:.2f}")
-    print(f"Total Assets: ₹{total_assets:.2f}")
+        if self.price < 1:
+            self.price = 1
 
 
+# ------------------ MARKET CLASS ------------------
 
-def buy(cash, portfolio):
-    stock = input("Select the stock you want to buy: ").upper()
+class Market:
+    def __init__(self):
+        self.stocks = {}
 
-    if stock not in stock_list:
-        print("Stock does not exist")
-        return cash, portfolio
+    def add_stock(self, name, price):
+        self.stocks[name] = Stock(name, price)
 
-    try:
-        quantity = int(input("Enter quantity: "))
-    except ValueError:
-        print("Invalid quantity")
-        return cash, portfolio
+    def update_market(self):
+        for stock in self.stocks.values():
+            stock.update_price()
 
-    if quantity <= 0:
-        print("Quantity must be positive")
-        return cash, portfolio
-
-    price = stock_list[stock]
-    cost = price * quantity
-
-    if cost > cash:
-        print("Insufficient funds")
-        return cash, portfolio
-
-    cash -= cost
-
-    if stock in portfolio:
-        portfolio[stock] += quantity
-    else:
-        portfolio[stock] = quantity
-
-    print(f"Bought {quantity} shares of {stock}")
-    return cash, portfolio
+    def show_prices(self):
+        print("\n--- Market Prices ---")
+        for stock in self.stocks.values():
+            print(f"{stock.name}: ₹{stock.price:.2f}")
 
 
-def sell(cash, portfolio):
-    stock = input("Select the stock you want to sell: ").upper()
+# ------------------ PORTFOLIO CLASS ------------------
 
-    if stock not in portfolio:
-        print("You do not own this stock")
-        return cash, portfolio
+class Portfolio:
+    def __init__(self, cash):
+        self.cash = cash
+        self.holdings = {}
 
-    try:
-        quantity = int(input("Enter quantity to sell: "))
-    except ValueError:
-        print("Invalid quantity")
-        return cash, portfolio
+    def buy(self, market):
+        stock_name = input("Select the stock you want to buy: ").upper()
 
-    if quantity <= 0:
-        print("Quantity must be positive")
-        return cash, portfolio
+        if stock_name not in market.stocks:
+            print("Stock does not exist")
+            return
 
-    if quantity > portfolio[stock]:
-        print("Cannot sell more than you own")
-        return cash, portfolio
+        try:
+            quantity = int(input("Enter quantity: "))
+        except ValueError:
+            print("Invalid quantity")
+            return
 
-    price = stock_list[stock]
-    sell_value = price * quantity
+        if quantity <= 0:
+            print("Quantity must be positive")
+            return
 
-    cash += sell_value
-    portfolio[stock] -= quantity
+        stock = market.stocks[stock_name]
+        cost = stock.price * quantity
 
-    if portfolio[stock] == 0:
-        del portfolio[stock]
+        if cost > self.cash:
+            print("Insufficient funds")
+            return
 
-    print(f"Sold {quantity} shares of {stock}")
-    return cash, portfolio
+        self.cash -= cost
+        self.holdings[stock_name] = self.holdings.get(stock_name, 0) + quantity
+
+        print(f"Bought {quantity} shares of {stock_name}")
+
+    def sell(self, market):
+        stock_name = input("Select the stock you want to sell: ").upper()
+
+        if stock_name not in self.holdings:
+            print("You do not own this stock")
+            return
+
+        try:
+            quantity = int(input("Enter quantity to sell: "))
+        except ValueError:
+            print("Invalid quantity")
+            return
+
+        if quantity <= 0:
+            print("Quantity must be positive")
+            return
+
+        if quantity > self.holdings[stock_name]:
+            print("Cannot sell more than you own")
+            return
+
+        stock = market.stocks[stock_name]
+        sell_value = stock.price * quantity
+
+        self.cash += sell_value
+        self.holdings[stock_name] -= quantity
+
+        if self.holdings[stock_name] == 0:
+            del self.holdings[stock_name]
+
+        print(f"Sold {quantity} shares of {stock_name}")
+
+    def show_portfolio(self, market):
+        print(f"\nCash Available: ₹{self.cash:.2f}")
+        print("\n--- Portfolio ---")
+
+        portfolio_value = 0
+
+        if not self.holdings:
+            print("No holdings")
+        else:
+            for stock_name, qty in self.holdings.items():
+                current_price = market.stocks[stock_name].price
+                total_value = qty * current_price
+                portfolio_value += total_value
+
+                print(f"{stock_name}: {qty} shares | ₹{current_price:.2f} each | Total: ₹{total_value:.2f}")
+
+        total_assets = self.cash + portfolio_value
+
+        print(f"\nPortfolio Value: ₹{portfolio_value:.2f}")
+        print(f"Total Assets: ₹{total_assets:.2f}")
+
+        return total_assets
 
 
 # ------------------ MAIN PROGRAM ------------------
 
-portfolio = {}
-cash = 10000
+market = Market()
+market.add_stock("HDFC", 2000)
+market.add_stock("TATA", 4600)
+market.add_stock("RELIANCE", 6000)
+
+player = Portfolio(10000)
+
 round_count = 0
-game_over=False
+game_over = False
 
 while round_count < 10 and not game_over:
     print(f"\n======== ROUND {round_count + 1} ========")
 
-    update_market()
-    show_market(cash, portfolio)
+    market.show_prices()
+    player.show_portfolio(market)
+
     while True:
         try:
-            choice = int(input("\n1 = Buy | 2 = Sell | 3 = End Game | 4=Complete Game\nSelect: "))
+            choice = int(input("\n1 = Buy | 2 = Sell | 3 = End Round | 4 = Complete Game\nSelect: "))
         except ValueError:
             print("Invalid choice")
             continue
-        if choice==4:
-            game_over=True
+
+        if choice == 4:
+            game_over = True
             break
+
         elif choice == 3:
             break
+
         elif choice == 1:
-            cash, portfolio = buy(cash, portfolio)
+            player.buy(market)
+            player.show_portfolio(market)
+
         elif choice == 2:
-            cash, portfolio = sell(cash, portfolio)
+            player.sell(market)
+            player.show_portfolio(market)
+
         else:
             print("Invalid option")
+
     if not game_over:
-        update_market()
+        market.update_market()
         round_count += 1
 
 
-# --------- FINAL CALCULATIONS ---------
+# ------------------ FINAL RESULTS ------------------
 
-portfolio_value = 0
-for stock in portfolio:
-    portfolio_value += portfolio[stock] * stock_list[stock]
-
-total_assets = cash + portfolio_value
-roi = ((total_assets - 10000) / 10000) * 100
+final_assets = player.show_portfolio(market)
+roi = ((final_assets - 10000) / 10000) * 100
 
 print("\n========= GAME OVER =========")
-print(f"Final Portfolio Value: ₹{portfolio_value:.2f}")
-print(f"Final Cash: ₹{cash:.2f}")
-print(f"Total Assets: ₹{total_assets:.2f}")
 print(f"ROI: {roi:.2f}%")
