@@ -116,30 +116,33 @@ def sell(cash, portfolio):
 portfolio = {}
 cash = 10000
 round_count = 0
+game_over=False
 
-while round_count < 10:
+while round_count < 10 and not game_over:
     print(f"\n======== ROUND {round_count + 1} ========")
 
     update_market()
     show_market(cash, portfolio)
-
-    try:
-        choice = int(input("\n1 = Buy | 2 = Sell | 3 = End Game\nSelect: "))
-    except ValueError:
-        print("Invalid choice")
-        continue
-
-    if choice == 3:
-        break
-    elif choice == 1:
-        cash, portfolio = buy(cash, portfolio)
-    elif choice == 2:
-        cash, portfolio = sell(cash, portfolio)
-    else:
-        print("Invalid option")
-        continue
-
-    round_count += 1
+    while True:
+        try:
+            choice = int(input("\n1 = Buy | 2 = Sell | 3 = End Game | 4=Complete Game\nSelect: "))
+        except ValueError:
+            print("Invalid choice")
+            continue
+        if choice==4:
+            game_over=True
+            break
+        elif choice == 3:
+            break
+        elif choice == 1:
+            cash, portfolio = buy(cash, portfolio)
+        elif choice == 2:
+            cash, portfolio = sell(cash, portfolio)
+        else:
+            print("Invalid option")
+    if not game_over:
+        update_market()
+        round_count += 1
 
 
 # --------- FINAL CALCULATIONS ---------
