@@ -1,6 +1,6 @@
 # Trading Simulator Lite
 
-A simple command line stock market simulator built in Python.
+A command line stock market simulator built in Python using object-oriented design.
 
 This project simulates basic trading mechanics using virtual money, dynamic stock prices, and portfolio tracking.
 
@@ -9,13 +9,16 @@ This project simulates basic trading mechanics using virtual money, dynamic stoc
 ## Features
 
 - Virtual starting capital of ₹10,000
-- Random stock price fluctuations each round
-- Buy and sell functionality
+- Multiple stocks available for trading
+- Random stock price fluctuations (±5%) per round
+- Multiple buy and sell transactions per round
+- Option to end a round manually
+- Option to complete the game early
 - Portfolio tracking with live valuation
 - Cash balance tracking
 - Total asset calculation
 - ROI percentage calculation
-- 10 round game limit
+- 10 round maximum game limit
 
 ---
 
@@ -23,12 +26,14 @@ This project simulates basic trading mechanics using virtual money, dynamic stoc
 
 Each round:
 
-1. Stock prices update randomly within a ±5% range
-2. Current market prices are displayed
-3. User chooses to buy, sell, or end the game
-4. Portfolio and cash are updated accordingly
+1. Current market prices are displayed
+2. User can perform multiple buy/sell transactions
+3. User can end the round manually
+4. After the round ends, stock prices update randomly
 
-At the end of 10 rounds, the simulator calculates:
+The game can also be completed early using the "Complete Game" option.
+
+At the end of the game, the simulator calculates:
 
 - Final portfolio value
 - Remaining cash
@@ -39,12 +44,10 @@ At the end of 10 rounds, the simulator calculates:
 
 ## Project Structure
 
-```
 trading-simulator/
 │
 ├── trade.py
 └── README.md
-```
 
 ---
 
@@ -54,28 +57,26 @@ trading-simulator/
 2. Open terminal in the project directory.
 3. Run:
 
-```
 python trade.py
-```
 
 ---
 
 ## Concepts Used
 
-- Dictionaries for market and portfolio storage
-- Functions for modular transaction handling
+- Object-Oriented Programming (OOP)
+- Classes and Objects (Stock, Market, Portfolio)
+- Encapsulation and separation of concerns
+- Dictionaries for holdings storage
 - Random module for market simulation
-- Conditional logic for validation
-- Loop control for round management
+- Conditional validation logic
+- Nested loops for round control
 
 ---
 
 ## Future Improvements
 
 - Save trade history to a file
-- Add multiple stocks dynamically
-- Implement volatility levels
-- Convert to class-based architecture
+- Implement advanced volatility models
 - Add graphical interface
 
 ---
