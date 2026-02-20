@@ -44,10 +44,12 @@ At the end of the game, the simulator calculates:
 
 ## Project Structure
 
+```
 trading-simulator/
 │
 ├── trade.py
 └── README.md
+```
 
 ---
 
