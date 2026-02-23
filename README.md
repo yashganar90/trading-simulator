@@ -1,8 +1,8 @@
 # Trading Simulator Lite
 
-A command line stock market simulator built in Python using object-oriented design.
+A GUI-based stock market simulator built in Python using object-oriented design and tkinter.
 
-This project simulates basic trading mechanics using virtual money, dynamic stock prices, and portfolio tracking.
+This project simulates basic trading mechanics using virtual money, dynamic stock prices, portfolio tracking, and trade history export.
 
 ---
 
@@ -11,34 +11,26 @@ This project simulates basic trading mechanics using virtual money, dynamic stoc
 - Virtual starting capital of ₹10,000
 - Multiple stocks available for trading
 - Random stock price fluctuations (±5%) per round
-- Multiple buy and sell transactions per round
-- Option to end a round manually
-- Option to complete the game early
-- Portfolio tracking with live valuation
-- Cash balance tracking
-- Total asset calculation
-- ROI percentage calculation
-- 10 round maximum game limit
+- Interactive tkinter graphical interface
+- Buy and sell functionality with live updates
+- Real-time cash balance display
+- Live portfolio value calculation
+- Total asset tracking
+- Trade history tracking
+- Export trade history to CSV file
 
 ---
 
 ## How It Works
 
-Each round:
+- Market prices are displayed inside the GUI
+- User enters stock name and quantity
+- Buy and Sell buttons execute trades instantly
+- Cash, portfolio value, and total assets update in real time
+- End Round updates stock prices
+- Save Trade History exports all transactions to `trade_history.csv`
 
-1. Current market prices are displayed
-2. User can perform multiple buy/sell transactions
-3. User can end the round manually
-4. After the round ends, stock prices update randomly
-
-The game can also be completed early using the "Complete Game" option.
-
-At the end of the game, the simulator calculates:
-
-- Final portfolio value
-- Remaining cash
-- Total assets
-- ROI percentage
+The application uses event-driven programming instead of a command line loop.
 
 ---
 
@@ -61,6 +53,8 @@ trading-simulator/
 
 python trade.py
 
+The GUI window will open.
+
 ---
 
 ## Concepts Used
@@ -68,18 +62,18 @@ python trade.py
 - Object-Oriented Programming (OOP)
 - Classes and Objects (Stock, Market, Portfolio)
 - Encapsulation and separation of concerns
+- Event-driven programming with tkinter
 - Dictionaries for holdings storage
 - Random module for market simulation
-- Conditional validation logic
-- Nested loops for round control
+- CSV file handling for data export
 
 ---
 
 ## Future Improvements
 
-- Save trade history to a file
 - Implement advanced volatility models
-- Add graphical interface
+- Add graphical stock price charts
+- Improve GUI layout and styling
 
 ---
 
